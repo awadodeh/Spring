@@ -2,43 +2,32 @@ package com.owdaawad.business.reservation.reservationbusinessservices;
 
 import com.owdaawad.business.reservation.reservationbusinessservices.client.RoomService;
 import com.owdaawad.business.reservation.reservationbusinessservices.domain.Room;
+import com.owdaawad.business.reservation.reservationbusinessservices.domain.RoomReservation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Api(value = "RoomReservations", description = "Business process service operations on rooms and reservations", tags = ("roomReservations"))
 public class RoomReservationController {
-
-//    @Autowired
-//    private RestTemplate restTemplate;
-
     @Autowired
     private RoomService roomService;
 
-    @RequestMapping(value = "/rooms",method = RequestMethod.GET)
-    public List<Room> getAllRooms(){
+    @Autowired
+    private RoomReservationBusinessProcess businessProcess;
 
-        /**
-         * Note in following:
-         * 1. ROOMSERVICES: this Ribbon will get it from Eureka
-         * 2. Ribbon will make the call thru Eureka, making code replacement and get the URL for our room services URL.
-         * JUST WOW!!
-         */
-//        ResponseEntity<List<Room>> roomsResponse = this.restTemplate.exchange(
-//                "http://ROOMSERVICES/rooms", HttpMethod.GET, null, new ParameterizedTypeReference<List<Room>>() {
-//                }
-//        );
-//
-//        return roomsResponse.getBody();
+    @RequestMapping(value = "/rooms", method = RequestMethod.GET)
+    @ApiOperation(value = "Get All Rooms", notes = "Gets all rooms in the system", nickname = "getRooms")
+    public List<Room> getAllRooms(@RequestParam(name = "roomNumber", required = false) String roomNumber) {
+        return this.roomService.findAll(roomNumber);
+    }
 
-
-        return this.roomService.findAll(null);
+    @RequestMapping(value = "/roomReservations/{date}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get Room Reservations", notes = "Gets all reservations for a specific date", nickname = "getReservationsForDate")
+    public List<RoomReservation> getRoomReservationsForDate(@PathVariable("date") String date) {
+        return this.businessProcess.getRoomReservationsForDate(date);
     }
 }
