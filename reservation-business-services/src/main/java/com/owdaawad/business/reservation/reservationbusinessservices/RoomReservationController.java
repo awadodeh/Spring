@@ -1,5 +1,6 @@
 package com.owdaawad.business.reservation.reservationbusinessservices;
 
+import com.owdaawad.business.reservation.reservationbusinessservices.client.RoomService;
 import com.owdaawad.business.reservation.reservationbusinessservices.domain.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,8 +16,11 @@ import java.util.List;
 @RestController
 public class RoomReservationController {
 
+//    @Autowired
+//    private RestTemplate restTemplate;
+
     @Autowired
-    private RestTemplate restTemplate;
+    private RoomService roomService;
 
     @RequestMapping(value = "/rooms",method = RequestMethod.GET)
     public List<Room> getAllRooms(){
@@ -27,11 +31,14 @@ public class RoomReservationController {
          * 2. Ribbon will make the call thru Eureka, making code replacement and get the URL for our room services URL.
          * JUST WOW!!
          */
-        ResponseEntity<List<Room>> roomsResponse = this.restTemplate.exchange(
-                "http://ROOMSERVICES/rooms", HttpMethod.GET, null, new ParameterizedTypeReference<List<Room>>() {
-                }
-        );
+//        ResponseEntity<List<Room>> roomsResponse = this.restTemplate.exchange(
+//                "http://ROOMSERVICES/rooms", HttpMethod.GET, null, new ParameterizedTypeReference<List<Room>>() {
+//                }
+//        );
+//
+//        return roomsResponse.getBody();
 
-        return roomsResponse.getBody();
+
+        return this.roomService.findAll(null);
     }
 }
