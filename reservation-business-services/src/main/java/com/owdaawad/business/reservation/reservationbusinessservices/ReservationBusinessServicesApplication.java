@@ -3,6 +3,7 @@ package com.owdaawad.business.reservation.reservationbusinessservices;
 import io.swagger.annotations.Contact;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
@@ -20,6 +21,7 @@ import static springfox.documentation.builders.PathSelectors.any;
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableSwagger2
+@EnableCircuitBreaker
 public class ReservationBusinessServicesApplication {
 
 	@Bean
